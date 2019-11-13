@@ -17,7 +17,7 @@ There is a spike if both the density profile and the (temperature or salinity) p
 ## Scripts
 
 This is composed of three routines:
- - The main call QTRT_spike_check_medd_main.m that includes the configuration, launches the other routines, and compute final compound spike detection (density + physical parameter)
+ - The main call QTRT_spike_check_medd_main.m that includes the configuration, launches the other routines, and computes final compound spike detection (density + salinity/temperature parameters)
  - QTRT_spike_check_medd.m that computes the median, call the relative_2D_distance routine and computes unitary spikes suspicions
  - relative_2D_distance.m that computes the limits located at relative 2-dimensional distance d from a curve
 
