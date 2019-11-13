@@ -23,7 +23,7 @@ This is composed of three routines:
 
 ## Documentation
 
-See the specification for a more detailed explanation of the algorithms.
+See the specification in the doc folder for a more detailed explanation of the algorithms.
 
 ## Inputs (in the call of routine QTRT_spike_check_medd_main.m) :
  - PRES: pressure values
