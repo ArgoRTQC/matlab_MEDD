@@ -1,18 +1,19 @@
 function [SPIKE_T,SPIKE_S,BO_T,BO_S,TEMP_med,TEMP_medm,TEMP_medp,PSAL_med,PSAL_medm,PSAL_medp,DENS_med,DENS_medm,DENS_medp] = QTRT_spike_check_MEDD_main(PRES,TEMP,PSAL,DENS,LAT)
 %
 % Author: D.Dobler (IFREMER) 
-% Date: 2019/11/05
-% Version: 1.1
-% Modification: 1.1 (2019/11/05): separate robustness test steps from main call of the function to put it in operation
-% 			    1.0 (2109/09/01): creation
+% Date: 2019/11/20
+% Version: 1.2
+% Modification: 1.2 (2019/11/20): specify units of inputs
+%				1.1 (2019/11/05): separate robustness test steps from main call of the function to put it in operation
+% 			    1.0 (2019/09/01): creation
 %
 % Description: This routine was developed to look for a better automatic test that would find spikes in profiles.
 % 
-% inputs: PRES: pressure values
-%         TEMP: temperature values
-%         PSAL: salinity values (should be NaN(size(PRES)) if not available)
-%		  DENS: density values (should be NaN(size(PRES)) if not available)
-% 		  LAT: latitude of the profiles in degrees
+% inputs: PRES: pressure values in [dbar]
+%         TEMP: temperature values [°C - ITS90]
+%         PSAL: salinity values [PSS-78] (should be NaN(size(PRES)) if not available)
+%		  DENS: potential density values [kg/m3]  (should be NaN(size(PRES)) if not available)
+% 		  LAT: latitude of the profiles in [degrees]
 %
 % outputs: SPIKE_T: array of size(PRES) with a 1 on temperature spikes, It is set to NaN if the computation could not be made
 %		   SPIKE_S: array of size(PRES) with a 1 on salinity spikes, It is set to NaN if the computation could not be made
