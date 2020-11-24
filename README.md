@@ -28,8 +28,8 @@ See the specification in the doc folder for a more detailed explanation of the a
 ## Inputs (in the call of routine QTRT_spike_check_medd_main.m) :
  - PRES: pressure values
  - TEMP: temperature values
- - PSAL: salinity values (should be NaN(size(PRES)) if not available)
- - DENS: density values (should be NaN(size(PRES)) if not available)
+ - PSAL: salinity values (should be set to NaN(size(PRES)) if not available)
+ - DENS: potental density values referenced to 0 dbar and computed as per TEOS-10. Density values in validation material are computed using Gibbs SeaWater library (the array should be set to NaN(size(PRES)) if not available)
  - LAT: latitude of the profiles in degrees
 
 ## Outputs:
