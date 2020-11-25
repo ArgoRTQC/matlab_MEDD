@@ -28,10 +28,18 @@ See the specification in the doc folder for a more detailed explanation of the a
 ## Inputs (in the call of routine QTRT_spike_check_medd_main.m) :
  - PRES: pressure values
  - TEMP: temperature values
- - PSAL: salinity values (should be set to NaN(size(PRES)) if not available)
- - DENS: potental density values referenced to 0 dbar and computed as per TEOS-10. Density values in validation material are computed using Gibbs SeaWater library (the array should be set to NaN(size(PRES)) if not available)
+ - PSAL: salinity values. This array should be set to NaN(size(PRES)) if not available.
+ - DENS: potental density values referenced to 0 dbar and computed as per TEOS-10. Density values in validation material are computed using Gibbs SeaWater library - see details in last section. This array should be set to NaN(size(PRES)) if not available.
  - LAT: latitude of the profiles in degrees
 
 ## Outputs:
  - SPIKE_T: array of size(PRES) with a 1 on temperature spikes, It is set to NaN if the computation could not be made
  - SPIKE_S: array of size(PRES) with a 1 on salinity spikes, It is set to NaN if the computation could not be made
+ 
+## Potential density computation:
+Here is the piece of Matlab code executed to retrieve the potential density referenced to 0 dbar needed as input for the algorithm and using the Gibbs Sea Water library:
+ - PRES_no_neg=PRES;
+ - PRES_no_neg(find( PRES<0 | PRES > 11000 ))=nan;
+ - [SA,in_ocean]=gsw_SA_from_SP(PSAL,PRES_no_neg,LON,LAT);
+ - CT=gsw_CT_from_t(SA,TEMP,PRES);
+ - DENS=gsw_rho(SA,CT,0);
