@@ -3,7 +3,8 @@ function [SPIKE_T,SPIKE_S,BO_T,BO_S,TEMP_med,TEMP_medm,TEMP_medp,PSAL_med,PSAL_m
 % Author: D.Dobler (IFREMER) 
 % Date: 2019/11/20
 % Version: 1.2
-% Modification: 1.2 (2019/11/20): specify units of inputs
+% Modification:	1.3 (2020/12/18): Add checks on input array dimensions and transpose if needed 
+% 				1.2 (2019/11/20): specify units of inputs
 %				1.1 (2019/11/05): separate robustness test steps from main call of the function to put it in operation
 % 			    1.0 (2019/09/01): creation
 %
@@ -21,6 +22,53 @@ function [SPIKE_T,SPIKE_S,BO_T,BO_S,TEMP_med,TEMP_medm,TEMP_medp,PSAL_med,PSAL_m
 % 		   BO_S: breakout on salinity evaluation, set to 1 if the number of finite measures is less than 5, set to 0 otherwise
 %		   The other outputs PROF_med, PROF_medm and PROF_medp with PROF = {'PSAL','TEMP','DENS'} are only used for display purpose for robustness tests
 %			
+
+% MODIF 2020/12/18:
+% First some checks on dimensions:
+if size(PRES,1)==1
+    PRES=PRES'
+end
+
+if size(TEMP,1)==1
+    TEMP=TEMP'
+end
+
+if size(PSAL,1)==1
+    PSAL=PSAL'
+end
+
+if size(DENS,1)==1
+    DENS=DENS'
+end
+
+if size(PRES,1)~=1 & size(PRES,2)~=1
+	disp('ERROR: PRES dimensions are not correct, they should be 1 x n or n x 1')
+	size(PRES)
+	disp('exiting function')
+	return
+end
+
+if size(TEMP,1)~=1 & size(TEMP,2)~=1
+	disp('ERROR: TEMP dimensions are not correct, they should be 1 x n or n x 1')
+	size(TEMP)
+	disp('exiting function')
+	return
+end
+
+if size(PSAL,1)~=1 & size(PSAL,2)~=1
+	disp('ERROR: PSAL dimensions are not correct, they should be 1 x n or n x 1')
+	size(PSAL)
+	disp('exiting function')
+	return
+end
+
+if size(DENS,1)~=1 & size(DENS,2)~=1
+	disp('ERROR: DENS dimensions are not correct, they should be 1 x n or n x 1')
+	size(DENS)
+	disp('exiting function')
+	return
+end
+% FIN MODIF 2020/12/18:
 
 
 % Configuration of MEDD test 
