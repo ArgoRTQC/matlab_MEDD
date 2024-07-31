@@ -1,14 +1,22 @@
 function [SPIKE_T,SPIKE_S,BO_T,BO_S,TEMP_med,TEMP_medm,TEMP_medp,PSAL_med,PSAL_medm,PSAL_medp,DENS_med,DENS_medm,DENS_medp] = QTRT_spike_check_MEDD_main(PRES,TEMP,PSAL,DENS,LAT)
 %
-% Author: D.Dobler (IFREMER) 
-% Date: 2019/11/20
-% Version: 1.2
-% Modification:	1.3 (2020/12/18): Add checks on input array dimensions and transpose if needed 
+% Author: D.Dobler (IFREMER, EURO-ARGO ERIC) 
+% Date: 2024/07/31
+% Version: 1.4
+% Modification:	1.4 (2024/07/31): add pressure ascending order constraints,
+%                                 sort inputs in ascending order at the beggining of the script,
+%                                 then sort back to initial order at the
+%                                 end of the script using Ivar Eskerud Smith (2024). 
+%                                 Sort back data to original order (https://www.mathworks.com/matlabcentral/fileexchange/28548-sort-back-data-to-original-order), 
+%                                 MATLAB Central File Exchange. Accessed July 31, 2024.
+%               1.3 (2020/12/18): add checks on input array dimensions and transpose if needed 
 % 				1.2 (2019/11/20): specify units of inputs
 %				1.1 (2019/11/05): separate robustness test steps from main call of the function to put it in operation
 % 			    1.0 (2019/09/01): creation
 %
 % Description: This routine was developed to look for a better automatic test that would find spikes in profiles.
+%              It assumes ascending pressure values. This constraint has
+%              been secured in 1.4 version.
 % 
 % inputs: PRES: pressure values in [dbar]
 %         TEMP: temperature values [°C - ITS90]
@@ -26,19 +34,19 @@ function [SPIKE_T,SPIKE_S,BO_T,BO_S,TEMP_med,TEMP_medm,TEMP_medp,PSAL_med,PSAL_m
 % MODIF 2020/12/18:
 % First some checks on dimensions:
 if size(PRES,1)==1
-    PRES=PRES'
+    PRES=PRES';
 end
 
 if size(TEMP,1)==1
-    TEMP=TEMP'
+    TEMP=TEMP';
 end
 
 if size(PSAL,1)==1
-    PSAL=PSAL'
+    PSAL=PSAL';
 end
 
 if size(DENS,1)==1
-    DENS=DENS'
+    DENS=DENS';
 end
 
 if size(PRES,1)~=1 & size(PRES,2)~=1
@@ -68,7 +76,14 @@ if size(DENS,1)~=1 & size(DENS,2)~=1
 	disp('exiting function')
 	return
 end
-% FIN MODIF 2020/12/18:
+% END MODIF 2020/12/18
+
+% START MODIF 1/2 2024/07/31:
+[PRES, i_ascending_order]=sort(PRES);
+PSAL=PSAL(i_ascending_order);
+TEMP=TEMP(i_ascending_order);
+DENS=DENS(i_ascending_order);
+% END MODIF 1/2 2024/07/31
 
 
 % Configuration of MEDD test 
@@ -126,3 +141,21 @@ if BO_S
 else
 	SPIKE_S = ( spikeS & ( spikeD | isnan(DENS) ) );
 end
+
+% START MODIF 2/2 2024/07/31:
+TEMP_med=sort_back(TEMP_med,i_ascending_order,1);
+TEMP_medm=sort_back(TEMP_medm,i_ascending_order,1);
+TEMP_medp=sort_back(TEMP_medp,i_ascending_order,1);
+PSAL_med=sort_back(PSAL_med,i_ascending_order,1);
+PSAL_medm=sort_back(PSAL_medm,i_ascending_order,1);
+PSAL_medp=sort_back(PSAL_medp,i_ascending_order,1);
+DENS_med=sort_back(DENS_med,i_ascending_order,1);
+DENS_medm=sort_back(DENS_medm,i_ascending_order,1);
+DENS_medp=sort_back(DENS_medp,i_ascending_order,1);
+SPIKE_T=double(SPIKE_T);
+SPIKE_S=double(SPIKE_S);
+SPIKE_T=sort_back(SPIKE_T,i_ascending_order,1);
+SPIKE_S=sort_back(SPIKE_S,i_ascending_order,1);
+SPIKE_T=logical(SPIKE_T);
+SPIKE_S=logical(SPIKE_S);
+% END MODIF 2/2 2024/07/31
